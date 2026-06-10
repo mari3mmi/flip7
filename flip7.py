@@ -96,7 +96,7 @@ class Game:
         card = self.deck.deal()
         if card == None: 
             self.deck.reset(True)
-            self.deck.suffle()
+            self.deck.shuffle()
             self.draw()
         else: 
             return card
@@ -107,6 +107,9 @@ class Game:
         if (card.type == 'Action'):
             if (card.value == 'Freeze'): 
                 chosen = self.players[int(input("select player to Freeze: "))-1]
+                while chosen.Frozen == 'True': 
+                    print("Player is already Frozen. Please select another player.")
+                    chosen = self.players[int(input("select player to Freeze: "))-1]
                 chosen.Frozen = True
                 self.deck.discard.append(card)
             if (card.value == 'Second Chance'): 
@@ -139,7 +142,7 @@ class Game:
                 player.Hand = []
     
 
-    def calculateScores(self, flippedSeven): 
+    def calculateScores(self, flippedSeven = False): 
         #TODO: Optimize to avoid cycling through each time. Sort the HAND.
         for player in self.players: 
             if not player.Busted:
@@ -148,8 +151,7 @@ class Game:
                 player.Score +=  sum(card.value for card in player.Hand if card.type == 'Modifier')
                 if flippedSeven: 
                     player.Score += 15
-            print("Score: ")
-            print(player.Score)    
+            print(f"Player {self.players.index(player)+1} Score: {player.Score}")
             self.deck.discard.append(player.Hand)
             player.reset()
             if player.Score > 199: 
@@ -160,29 +162,33 @@ class Game:
         self.deck.shuffle()
         while not self.Over:  
             for player in self.players: 
+                print("============================================")
+                print(f"Player's Turn: {self.players.index(player)+1}")
+                print("Your Hand:")
+                print(player.Hand)
                 if not player.Busted and not player.Frozen and not player.Rested: 
-                    print("Your Hand:")
-                    print(player.Hand)
-                    self.handleDrawnCard(self.draw(), player)
-                    if (self.flipSeven(player.Hand)): 
-                        print("You've flipped seven. Congratulations!")
-                        self.calculateScores(True)
-                        self.round+=1
-                if not player.Busted and not player.Frozen:
-                    player.Rested = input("Would you like to rest your hand: (True of False)").upper() == "TRUE"
+                    if len(player.Hand) != 0:
+                        player.Rested = input("Would you like to rest your hand: (True of False)").upper() == "TRUE"
+                    if not player.Rested: 
+                        self.handleDrawnCard(self.draw(), player)
+                        if (self.flipSeven(player.Hand)): 
+                            print("You've flipped seven. Congratulations!")
+                            self.calculateScores(True)
+                            self.round+=1
+                print("============================================")
             if (len(self.players) == sum(1 for player in self.players if (player.Busted or player.Frozen or player.Rested))):
                 self.calculateScores()
                 self.round+=1
         if self.Over:
             print("Game is Over.")
             for player in self.players:
-                print("Score: ")
-                print(player.Score)
+                print(f"Player {self.players.index(player)+1} Score: {player.Score}")
+
 
 
 def main():
     # Your primary program logic goes here
-    game = Game(1)
+    game = Game(int(input("Enter number of players: ")))
     game.gameLoop()
 
 if __name__ == "__main__":
