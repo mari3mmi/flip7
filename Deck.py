@@ -17,7 +17,8 @@ class Deck:
     def reset(self, useDiscard = False):
         """Populates the deck with a fresh set of cards."""
         if useDiscard: 
-            self.cards = self.discard
+            self.cards.extend(self.discard)
+            self.discard
             return
         else: 
             self.discard = []
