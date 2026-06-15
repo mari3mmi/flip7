@@ -45,6 +45,11 @@ class Game:
             return chosen
 
     def handleDrawnCard(self, card : Card, player):
+        if card is None:
+            return
+        if self.display:
+            self.display.animate_draw_card(self.players.index(player), card)
+
         print("Drawn Card:")
         print(card) 
         if (card.type == 'Action'):

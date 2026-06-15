@@ -7,7 +7,10 @@ class Card:
     def __init__(self, type, val):
         self.type = type
         self.value = val
-        self.image = ImageTk.PhotoImage(Image.open(f"{Path(__file__).parent}\\resources\\{self.type}_{str(self.value).replace(' ', '')}.png").resize((40, 80)))
+        # keep the original PIL image for dynamic transforms (flip/resize)
+        pil_img = Image.open(f"{Path(__file__).parent}\\resources\\{self.type}_{str(self.value).replace(' ', '')}.png").resize((40, 80))
+        self.pil_image = pil_img
+        self.image = ImageTk.PhotoImage(pil_img)
 
     def __repr__(self):
         # Provides a human-readable string representation of the card
