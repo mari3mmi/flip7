@@ -1,5 +1,6 @@
 import math
 import tkinter as tk
+from pathlib import Path
 from PIL import Image, ImageTk
 from tkinter import Canvas, Button, Label
 
@@ -43,7 +44,7 @@ class CardGameDisplay:
     def load_images(self):
         """Load and cache card images"""
         try:
-            back_image = Image.open("resources/back.png").resize((60, 90))
+            back_image = Image.open(f"{Path(__file__).parent}\\resources\\back.png").resize((60, 90))
             self.image_cache['back'] = ImageTk.PhotoImage(back_image)
         except Exception as e:
             print(f"Could not load back.png: {e}")

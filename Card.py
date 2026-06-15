@@ -1,4 +1,5 @@
 import tkinter as tk
+from pathlib import Path
 from PIL import Image, ImageTk
 
 class Card:
@@ -6,7 +7,7 @@ class Card:
     def __init__(self, type, val):
         self.type = type
         self.value = val
-        self.image = ImageTk.PhotoImage(Image.open(f"C:\\Users\\amari\\OneDrive\\Bureau\\git\\flip7\\resources\\{self.type}_{str(self.value).replace(' ', '')}.png").resize((40, 80)))
+        self.image = ImageTk.PhotoImage(Image.open(f"{Path(__file__).parent}\\resources\\{self.type}_{str(self.value).replace(' ', '')}.png").resize((40, 80)))
 
     def __repr__(self):
         # Provides a human-readable string representation of the card
