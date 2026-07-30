@@ -18,7 +18,7 @@ class Deck:
         """Populates the deck with a fresh set of cards."""
         if useDiscard: 
             self.cards.extend(self.discard)
-            self.discard
+            self.discard = []
             return
         else: 
             self.discard = []
