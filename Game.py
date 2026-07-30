@@ -45,6 +45,11 @@ class Game:
             return chosen
 
     def handleDrawnCard(self, card : Card, player):
+        if card is None:
+            return
+        if self.display:
+            self.display.animate_draw_card(self.players.index(player), card)
+
         print("Drawn Card:")
         print(card) 
         if (card.type == 'Action'):
@@ -95,7 +100,7 @@ class Game:
             player.Busted = True
             print("You Busted. Oh No!")
             self.deck.discard.append(card)
-            self.deck.discard.append(player.Hand)
+            self.deck.discard.extend(player.Hand)
             player.Hand = []
 
     def calculateScores(self, flippedSeven = False): 
@@ -108,7 +113,7 @@ class Game:
                 if flippedSeven: 
                     player.Score += 15
             print(f"Player {self.players.index(player)+1} Score: {player.Score}")
-            self.deck.discard.append(player.Hand)
+            self.deck.discard.extend(player.Hand)
             player.reset()
             if player.Score > 199: 
                 self.Over = True
